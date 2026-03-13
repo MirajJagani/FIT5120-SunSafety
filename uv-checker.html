@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SunSafe | UV Checker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-wrapper">
+      <a href="index.html" class="brand">
+        <span class="brand-icon">☀</span>
+        <span class="brand-text">SunSafe</span>
+      </a>
+
+      <nav class="nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="uv-checker.html" class="nav-link active">UV Checker</a>
+        <a href="awareness.html" class="nav-link">Awareness</a>
+        <a href="prevention.html" class="nav-link">Prevention</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="uv-page">
+      <div class="container">
+        <div class="section-heading">
+          <h2>Live UV Checker</h2>
+          <p>
+            Check the current UV level in your area and get a simple sun-safety alert.
+          </p>
+        </div>
+
+        <div class="uv-layout">
+          <div class="uv-form-card">
+            <h3>Find UV by Location</h3>
+
+            <button id="use-location-btn" type="button" class="btn btn-primary">
+              Use My Location
+            </button>
+
+            <p>or</p>
+
+            <form id="suburb-form">
+              <label for="suburb-input">Enter suburb or city</label>
+              <input
+                type="text"
+                id="suburb-input"
+                name="suburb-input"
+                placeholder="e.g. Clayton, Melbourne"
+                required
+              />
+              <button type="submit" class="btn btn-secondary">Search</button>
+            </form>
+          </div>
+
+          <div class="uv-result-card">
+            <h3>UV Result</h3>
+
+            <div class="uv-live-result">
+              <div class="uv-index-circle" id="uv-index-circle">
+                <span id="uv-index-value">--</span>
+              </div>
+
+              <div class="uv-result-info">
+                <p><strong>Location:</strong> <span id="location-name">Waiting for input...</span></p>
+                <p><strong>Risk Level:</strong> <span id="risk-pill" class="risk-pill">No data</span></p>
+                <p>
+                  <strong>Alert:</strong>
+                  <span id="uv-message">Choose your location or search a suburb to see the UV result.</span>
+                </p>
+                <p><strong>Updated:</strong> <span id="last-updated">--</span></p>
+              </div>
+            </div>
+
+            <div class="hourly-forecast">
+              <h3>Next Few Hours</h3>
+              <div class="hourly-grid" id="hourly-grid">
+                <p>No forecast loaded yet.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-wrapper">
+      <p>&copy; <span id="year"></span> SunSafe. Designed for young Australians.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script src="uv-checker.js"></script>
+</body>
+</html>
