@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SunSafe - Risk Quiz</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #fdf6f1;
+      color: #243b5a;
+    }
+
+    /* Navbar */
+    .site-header {
+      background: #fffaf7;
+      border-bottom: 1px solid #e8ddd6;
+      padding: 18px 60px;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .nav-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      font-size: 20px;
+      font-weight: 700;
+      color: #ff6b57;
+      gap: 10px;
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff8a2b, #ff5e7a);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 18px;
+    }
+
+    .nav {
+      display: flex;
+      gap: 22px;
+      align-items: center;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: #3f5b7d;
+      font-weight: 600;
+      padding: 10px 18px;
+      border-radius: 24px;
+      transition: 0.2s ease;
+    }
+
+    .nav a.active,
+    .nav a:hover {
+      background: linear-gradient(135deg, #ff8a2b, #ff5e7a);
+      color: white;
+    }
+
+    /* Main quiz section */
+    .quiz-section {
+      padding: 70px 60px;
+    }
+
+    .quiz-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    .quiz-left .badge {
+      display: inline-block;
+      background: #f8dfce;
+      color: #de6d1d;
+      font-weight: 700;
+      padding: 14px 22px;
+      border-radius: 999px;
+      margin-bottom: 28px;
+      font-size: 15px;
+    }
+
+    .quiz-left h1 {
+      font-size: 64px;
+      line-height: 1.05;
+      color: #ff7b22;
+      margin-bottom: 24px;
+      font-weight: 800;
+    }
+
+    .quiz-left p {
+      font-size: 18px;
+      line-height: 1.8;
+      color: #536b87;
+      max-width: 760px;
+      margin-bottom: 34px;
+    }
+
+    .progress-box {
+      background: #fff;
+      border: 1px solid #f0dfd3;
+      border-radius: 22px;
+      padding: 22px;
+      max-width: 720px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.03);
+    }
+
+    .progress-top {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-weight: 700;
+      color: #405775;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 14px;
+      background: #f3e7df;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      width: 33%;
+      height: 100%;
+      background: linear-gradient(135deg, #ff8a2b, #ff5e7a);
+      border-radius: 999px;
+    }
+
+    /* Quiz card */
+    .quiz-card {
+      background: #f7e3d8;
+      border-radius: 34px;
+      padding: 20px;
+    }
+
+    .quiz-card-inner {
+      background: #fff;
+      border-radius: 28px;
+      padding: 34px 30px;
+      min-height: 560px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+    }
+
+    .question-label {
+      display: inline-block;
+      background: #fff2e9;
+      color: #ea6f24;
+      font-weight: 700;
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-size: 14px;
+      margin-bottom: 18px;
+    }
+
+    .quiz-card h2 {
+      font-size: 28px;
+      color: #223b5a;
+      margin-bottom: 24px;
+      line-height: 1.4;
+    }
+
+    .options {
+      display: grid;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .option {
+      border: 2px solid #f0dfd3;
+      border-radius: 18px;
+      padding: 18px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: 0.2s ease;
+      background: #fff;
+    }
+
+    .option:hover {
+      border-color: #ff8a2b;
+      transform: translateY(-1px);
+    }
+
+    .option input {
+      accent-color: #ff6d4c;
+      transform: scale(1.2);
+    }
+
+    .option span {
+      font-size: 17px;
+      color: #314b68;
+      font-weight: 600;
+    }
+
+    .quiz-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 16px 28px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: 0.2s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #ff8a2b, #ff5e7a);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.92;
+    }
+
+    .btn-secondary {
+      background: white;
+      color: #1f3552;
+      border: 2px solid #ead8cd;
+    }
+
+    .btn-secondary:hover {
+      background: #fff8f3;
+    }
+
+    .tip-box {
+      margin-top: 28px;
+      background: #fff8f3;
+      border: 1px solid #f0dfd3;
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .tip-box h3 {
+      color: #ea6f24;
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .tip-box p {
+      color: #536b87;
+      font-size: 15px;
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    @media (max-width: 980px) {
+      .quiz-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .quiz-left h1 {
+        font-size: 46px;
+      }
+
+      .site-header,
+      .quiz-section {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+
+      .nav {
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav-wrapper {
+        flex-direction: column;
+        gap: 18px;
+        align-items: flex-start;
+      }
+
+      .quiz-left h1 {
+        font-size: 38px;
+      }
+
+      .quiz-card h2 {
+        font-size: 22px;
+      }
+
+      .btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-wrapper">
+      <a href="index.html" class="brand">
+        <span class="brand-icon">☀</span>
+        <span>SunSafe</span>
+      </a>
+
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="uv-checker.html">UV Checker</a>
+        <a href="awareness.html">Awareness</a>
+        <a href="prevention.html" class="active">Prevention</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="quiz-section">
+    <div class="container quiz-grid">
+      <!-- Left content -->
+      <div class="quiz-left">
+        <div class="badge">Sun Protection Risk Quiz</div>
+        <h1>Know Your Risk.<br />Protect Smarter.</h1>
+        <p>
+          Take this quick quiz to understand your sun exposure habits and learn
+          how to better protect your skin. Your answers can help you identify
+          potential risks and improve your daily sun safety routine.
+        </p>
+
+        <div class="progress-box">
+          <div class="progress-top">
+            <span>Quiz Progress</span>
+            <span>Question 1 of 3</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill"></div>
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <h3>Why this matters</h3>
+          <p>
+            Australia has one of the highest UV levels in the world. A quick
+            self-check can help you build safer daily habits, especially during
+            peak sun exposure hours.
+          </p>
+        </div>
+      </div>
+
+      <!-- Right quiz card -->
+      <div class="quiz-card">
+        <div class="quiz-card-inner">
+          <div class="question-label">Question 1</div>
+          <h2>How often do you apply sunscreen before going outside?</h2>
+
+          <form>
+            <div class="options">
+              <label class="option">
+                <input type="radio" name="q1" value="always" />
+                <span>Always</span>
+              </label>
+
+              <label class="option">
+                <input type="radio" name="q1" value="sometimes" />
+                <span>Sometimes</span>
+              </label>
+
+              <label class="option">
+                <input type="radio" name="q1" value="rarely" />
+                <span>Rarely</span>
+              </label>
+
+              <label class="option">
+                <input type="radio" name="q1" value="never" />
+                <span>Never</span>
+              </label>
+            </div>
+
+            <div class="quiz-actions">
+              <button type="button" class="btn btn-secondary">Previous</button>
+              <button type="button" class="btn btn-primary">Next Question</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="quiz.js"></script>
+</body>
+</html>
