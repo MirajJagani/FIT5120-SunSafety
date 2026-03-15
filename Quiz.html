@@ -1,10 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+  <!-- Basic page metadata -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Page title displayed in browser tab -->
   <title>SunSafe - Risk Quiz</title>
+
   <style>
+
+    /* =====================================
+       Global Reset and Base Styles
+       Ensures consistent spacing and layout
+    ====================================== */
+
     * {
       margin: 0;
       padding: 0;
@@ -17,7 +28,10 @@
       color: #243b5a;
     }
 
-    /* Navbar */
+    /* =====================================
+       Navigation Bar Styling
+    ====================================== */
+
     .site-header {
       background: #fffaf7;
       border-bottom: 1px solid #e8ddd6;
@@ -35,6 +49,7 @@
       align-items: center;
     }
 
+    /* Brand logo and site title */
     .brand {
       display: flex;
       align-items: center;
@@ -57,6 +72,7 @@
       font-size: 18px;
     }
 
+    /* Navigation menu links */
     .nav {
       display: flex;
       gap: 22px;
@@ -72,17 +88,22 @@
       transition: 0.2s ease;
     }
 
+    /* Highlight active page */
     .nav a.active,
     .nav a:hover {
       background: linear-gradient(135deg, #ff8a2b, #ff5e7a);
       color: white;
     }
 
-    /* Main quiz section */
+    /* =====================================
+       Main Quiz Section Layout
+    ====================================== */
+
     .quiz-section {
       padding: 70px 60px;
     }
 
+    /* Two-column layout: info + quiz card */
     .quiz-grid {
       display: grid;
       grid-template-columns: 1.1fr 0.9fr;
@@ -90,6 +111,7 @@
       align-items: start;
     }
 
+    /* Badge label above title */
     .quiz-left .badge {
       display: inline-block;
       background: #f8dfce;
@@ -101,6 +123,7 @@
       font-size: 15px;
     }
 
+    /* Main heading */
     .quiz-left h1 {
       font-size: 64px;
       line-height: 1.05;
@@ -109,6 +132,7 @@
       font-weight: 800;
     }
 
+    /* Description text */
     .quiz-left p {
       font-size: 18px;
       line-height: 1.8;
@@ -116,6 +140,10 @@
       max-width: 760px;
       margin-bottom: 34px;
     }
+
+    /* =====================================
+       Progress & Score Panel
+    ====================================== */
 
     .progress-box {
       background: #fff;
@@ -126,6 +154,7 @@
       box-shadow: 0 10px 20px rgba(0,0,0,0.03);
     }
 
+    /* Progress text */
     .progress-top {
       display: flex;
       justify-content: space-between;
@@ -134,6 +163,7 @@
       color: #405775;
     }
 
+    /* Progress bar background */
     .progress-bar {
       width: 100%;
       height: 14px;
@@ -142,14 +172,40 @@
       overflow: hidden;
     }
 
+    /* Filled portion of progress bar */
     .progress-fill {
       width: 33%;
       height: 100%;
       background: linear-gradient(135deg, #ff8a2b, #ff5e7a);
       border-radius: 999px;
     }
+    /* Score display box */
+    .score-box {
+      margin-bottom: 20px;
+      background: #fff8f3;
+      border: 1px solid #f0dfd3;
+      border-radius: 18px;
+      padding: 18px;
+    }
 
-    /* Quiz card */
+    .score-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #405775;
+      margin-bottom: 8px;
+    }
+
+    .score-value {
+      font-size: 32px;
+      font-weight: 800;
+      color: #ff7b22;
+      margin-bottom: 8px;
+    }
+
+    /* =====================================
+       Quiz Card Styling
+    ====================================== */
+
     .quiz-card {
       background: #f7e3d8;
       border-radius: 34px;
@@ -164,6 +220,7 @@
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
     }
 
+    /* Question label */
     .question-label {
       display: inline-block;
       background: #fff2e9;
@@ -175,6 +232,7 @@
       margin-bottom: 18px;
     }
 
+    /* Question text */
     .quiz-card h2 {
       font-size: 28px;
       color: #223b5a;
@@ -182,12 +240,14 @@
       line-height: 1.4;
     }
 
+    /* Answer option container */
     .options {
       display: grid;
       gap: 16px;
       margin-bottom: 28px;
     }
 
+    /* Individual option style */
     .option {
       border: 2px solid #f0dfd3;
       border-radius: 18px;
@@ -200,11 +260,13 @@
       background: #fff;
     }
 
+    /* Hover effect for options */
     .option:hover {
       border-color: #ff8a2b;
       transform: translateY(-1px);
     }
 
+    /* Radio button styling */
     .option input {
       accent-color: #ff6d4c;
       transform: scale(1.2);
@@ -215,6 +277,10 @@
       color: #314b68;
       font-weight: 600;
     }
+
+    /* =====================================
+       Quiz Navigation Buttons
+    ====================================== */
 
     .quiz-actions {
       display: flex;
@@ -239,19 +305,15 @@
       color: white;
     }
 
-    .btn-primary:hover {
-      opacity: 0.92;
-    }
-
     .btn-secondary {
       background: white;
       color: #1f3552;
       border: 2px solid #ead8cd;
     }
 
-    .btn-secondary:hover {
-      background: #fff8f3;
-    }
+    /* =====================================
+       Informational Tip Box
+    ====================================== */
 
     .tip-box {
       margin-top: 28px;
@@ -274,138 +336,134 @@
       margin: 0;
     }
 
-    @media (max-width: 980px) {
-      .quiz-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .quiz-left h1 {
-        font-size: 46px;
-      }
-
-      .site-header,
-      .quiz-section {
-        padding-left: 24px;
-        padding-right: 24px;
-      }
-
-      .nav {
-        gap: 8px;
-        flex-wrap: wrap;
-        justify-content: flex-end;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .nav-wrapper {
-        flex-direction: column;
-        gap: 18px;
-        align-items: flex-start;
-      }
-
-      .quiz-left h1 {
-        font-size: 38px;
-      }
-
-      .quiz-card h2 {
-        font-size: 22px;
-      }
-
-      .btn {
-        width: 100%;
-        text-align: center;
-      }
-    }
   </style>
 </head>
+
 <body>
+
+  <!-- =========================
+       Site Navigation Header
+  ========================== -->
   <header class="site-header">
     <div class="container nav-wrapper">
+
+      <!-- Website logo / brand -->
       <a href="index.html" class="brand">
-        <span class="brand-icon">☀</span>
+        <span class="brand-icon"></span>
         <span>SunSafe</span>
       </a>
 
+      <!-- Main navigation menu -->
       <nav class="nav">
         <a href="index.html">Home</a>
         <a href="uv-checker.html">UV Checker</a>
         <a href="awareness.html">Awareness</a>
-        <a href="prevention.html" class="active">Prevention</a>
+        <a href="prevention.html">Prevention</a>
+        <a href="quiz.html" class="active">Risk Quiz</a>
       </nav>
+
     </div>
   </header>
 
+  <!-- =========================
+       Quiz Main Section
+  ========================== -->
   <main class="quiz-section">
     <div class="container quiz-grid">
-      <!-- Left content -->
+
+      <!-- Left informational content -->
       <div class="quiz-left">
+
+        <!-- Quiz badge -->
         <div class="badge">Sun Protection Risk Quiz</div>
+
+        <!-- Quiz title -->
         <h1>Know Your Risk.<br />Protect Smarter.</h1>
+
+        <!-- Short explanation -->
         <p>
           Take this quick quiz to understand your sun exposure habits and learn
-          how to better protect your skin. Your answers can help you identify
-          potential risks and improve your daily sun safety routine.
+          how to better protect your skin.
         </p>
 
+        <!-- Score + Progress section -->
         <div class="progress-box">
+
+          <!-- Score display (updated dynamically via JavaScript) -->
+          <div class="score-box" id="scoreBox">
+            <div class="score-title">Current Score</div>
+            <div class="score-value">
+              <span id="scoreValue">0</span> / 9
+            </div>
+            <p id="scoreText">
+              Answer the questions to see your sun safety score.
+            </p>
+          </div>
+
+          <!-- Quiz progress indicator -->
           <div class="progress-top">
             <span>Quiz Progress</span>
             <span>Question 1 of 3</span>
           </div>
+
+          <!-- Progress bar -->
           <div class="progress-bar">
             <div class="progress-fill"></div>
           </div>
+
         </div>
 
+        <!-- Educational message -->
         <div class="tip-box">
           <h3>Why this matters</h3>
           <p>
-            Australia has one of the highest UV levels in the world. A quick
-            self-check can help you build safer daily habits, especially during
-            peak sun exposure hours.
+            Australia has one of the highest UV levels in the world.
           </p>
         </div>
+
       </div>
 
-      <!-- Right quiz card -->
+
+      <!-- =========================
+           Quiz Card (Right Side)
+      ========================== -->
       <div class="quiz-card">
+
         <div class="quiz-card-inner">
+
+          <!-- Question number label -->
           <div class="question-label">Question 1</div>
+
+          <!-- Question text (updated by JavaScript) -->
           <h2>How often do you apply sunscreen before going outside?</h2>
 
           <form>
-            <div class="options">
-              <label class="option">
-                <input type="radio" name="q1" value="always" />
-                <span>Always</span>
-              </label>
 
-              <label class="option">
-                <input type="radio" name="q1" value="sometimes" />
-                <span>Sometimes</span>
-              </label>
+            <!-- Answer options (generated dynamically by JS) -->
+            <div class="options"></div>
 
-              <label class="option">
-                <input type="radio" name="q1" value="rarely" />
-                <span>Rarely</span>
-              </label>
-
-              <label class="option">
-                <input type="radio" name="q1" value="never" />
-                <span>Never</span>
-              </label>
-            </div>
-
+            <!-- Navigation buttons -->
             <div class="quiz-actions">
               <button type="button" class="btn btn-secondary">Previous</button>
               <button type="button" class="btn btn-primary">Next Question</button>
             </div>
+
+            <!-- Final result display area -->
+            <div id="quizResult" class="tip-box" style="display:none; margin-top:20px;">
+              <h3>Your Result</h3>
+              <p id="resultText"></p>
+            </div>
+
           </form>
+
         </div>
       </div>
+
     </div>
   </main>
 
+  <!-- JavaScript file controlling quiz logic -->
   <script src="quiz.js"></script>
+
 </body>
 </html>
