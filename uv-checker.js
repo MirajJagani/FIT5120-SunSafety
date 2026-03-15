@@ -10,6 +10,12 @@ const uvMessageEl = document.getElementById("uv-message");
 const lastUpdatedEl = document.getElementById("last-updated");
 const hourlyGridEl = document.getElementById("hourly-grid");
 
+// Canvas element for UV visualisation
+const uvTrendChartEl = document.getElementById("uv-trend-chart");
+
+// Store chart instance so it can be replaced when the user searches again
+let uvTrendChartInstance = null;
+
 function getUvRiskDetails(uv) {
   if (uv < 3) {
     return {
@@ -76,6 +82,67 @@ function resetUvClasses() {
   );
 }
 
+// Create or update the UV trend line chart
+function renderUvTrendChart(hourlyTimes, hourlyUvValues) {
+  if (!uvTrendChartEl || typeof Chart === "undefined") return;
+
+  const labels = hourlyTimes.slice(0, 6).map((time) => formatHour(time));
+  const values = hourlyUvValues.slice(0, 6).map((uv) => Number(uv).toFixed(1));
+
+  // Destroy old chart before rendering a new one
+  if (uvTrendChartInstance) {
+    uvTrendChartInstance.destroy();
+  }
+
+  uvTrendChartInstance = new Chart(uvTrendChartEl, {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: "UV Index",
+          data: values,
+          borderWidth: 3,
+          tension: 0.35,
+          fill: false
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: {
+          display: true
+        },
+        tooltip: {
+          callbacks: {
+            label: function (context) {
+              return `UV ${context.parsed.y}`;
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          suggestedMax: 12,
+          title: {
+            display: true,
+            text: "UV Index"
+          }
+        },
+        x: {
+          title: {
+            display: true,
+            text: "Time"
+          }
+        }
+      }
+    }
+  });
+}
+
 function renderUvResult(locationLabel, currentUv, currentTime, hourlyTimes, hourlyUvValues) {
   const roundedUv = Number(currentUv).toFixed(1);
   const risk = getUvRiskDetails(Number(currentUv));
@@ -106,6 +173,9 @@ function renderUvResult(locationLabel, currentUv, currentTime, hourlyTimes, hour
     `;
     hourlyGridEl.appendChild(card);
   });
+
+  // Render the UV trend visualisation
+  renderUvTrendChart(hourlyTimes, hourlyUvValues);
 }
 
 async function fetchUvByCoordinates(latitude, longitude, locationLabel) {

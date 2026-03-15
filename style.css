@@ -137,7 +137,23 @@ img {
   flex-wrap: wrap;
   margin-bottom: 30px;
 }
+.uv-chart-section {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid #f0dfd3;
+}
 
+.chart-description {
+  color: #536b87;
+  font-size: 15px;
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+#uv-trend-chart {
+  width: 100%;
+  max-height: 320px;
+}
 .btn {
   display: inline-flex;
   align-items: center;

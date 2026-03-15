@@ -82,6 +82,14 @@
                 <p>No forecast loaded yet.</p>
               </div>
             </div>
+            <!-- UV trend visualisation -->
+            <div class="uv-chart-section">
+              <h3>UV Trend Visualisation</h3>
+              <p class="chart-description">
+                This chart shows how UV levels change over the next few hours.
+              </p>
+              <canvas id="uv-trend-chart"></canvas>
+            </div>
           </div>
         </div>
       </div>
@@ -93,7 +101,7 @@
       <p>&copy; <span id="year"></span> SunSafe. Designed for young Australians.</p>
     </div>
   </footer>
-
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="script.js"></script>
   <script src="uv-checker.js"></script>
 </body>
