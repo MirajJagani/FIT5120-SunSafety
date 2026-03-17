@@ -42,6 +42,12 @@
   margin-bottom: 18px;
 }
 
+.awareness-page .hero-text {
+  color: var(--text-body);
+  line-height: 1.7;
+  font-size: 1.05rem;
+}
+
 .awareness-page .section-heading {
   max-width: 1200px;
   margin: 0 auto 2rem;
@@ -52,7 +58,9 @@
 .impact-card,
 .action-card,
 .quiz-card,
-.myth-card {
+.myth-card,
+.melanin-card,
+.peer-education-card {
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: 22px;
@@ -63,7 +71,9 @@
 .myth-card,
 .info-card,
 .impact-card,
-.action-card {
+.action-card,
+.melanin-card,
+.peer-education-card {
   padding: 24px;
 }
 
@@ -88,7 +98,7 @@
 }
 
 .fact-side-image {
-  width: 50%;
+  width: 100%;
   max-width: 420px;
   height: auto;
   display: block;
@@ -107,9 +117,83 @@
 .impact-card p,
 .action-card p,
 .myth-body p,
-.quiz-result {
+.quiz-result,
+.melanin-card p,
+.peer-education-card p {
   color: var(--text-body);
   line-height: 1.7;
+}
+
+.melanin-card {
+  margin-bottom: 24px;
+}
+
+.melanin-card h3,
+.peer-education-card h3 {
+  margin-bottom: 12px;
+}
+
+.skin-guide-layout {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 22px;
+  align-items: start;
+  margin-bottom: 24px;
+}
+
+.skin-type-controls {
+  display: grid;
+  gap: 12px;
+}
+
+.skin-type-btn {
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--white);
+  color: var(--text-dark);
+  text-align: left;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+  box-shadow: 0 8px 18px rgba(20, 20, 43, 0.04);
+}
+
+.skin-type-btn:hover,
+.skin-type-btn.active {
+  background: linear-gradient(135deg, var(--orange), var(--pink));
+  color: var(--white);
+  border-color: transparent;
+}
+
+.skin-point-list {
+  padding-left: 20px;
+  margin-top: 16px;
+}
+
+.skin-point-list li {
+  color: var(--text-body);
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+.peer-points {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.peer-point {
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: #fff8f3;
+}
+
+.peer-point h4 {
+  margin-bottom: 10px;
+  color: var(--text-dark);
 }
 
 .myth-list {
@@ -183,7 +267,7 @@
 }
 
 .myth-card.active .myth-body {
-  max-height: 200px;
+  max-height: 220px;
   opacity: 1;
   margin-top: 18px;
 }
@@ -191,10 +275,10 @@
 .myth-body p {
   margin: 0;
   text-align: left;
-  font-size: 1.2rem;
-  line-height: 1.5;
-  font-weight: 100;
-  max-width: calc(100% - 48px);
+  font-size: 1rem;
+  line-height: 1.7;
+  font-weight: 400;
+  max-width: 100%;
 }
 
 .quiz-item + .quiz-item {
@@ -269,6 +353,14 @@
   transform: translateY(-2px);
 }
 
+@media (max-width: 1000px) {
+  .facts-layout,
+  .skin-guide-layout,
+  .peer-points {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 900px) {
   .awareness-hero .hero-grid,
   .impact-grid,
@@ -278,5 +370,30 @@
 
   .awareness-hero h1 {
     font-size: 2.4rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .section {
+    padding: 20px 0 56px;
+  }
+
+  .quiz-card,
+  .myth-card,
+  .info-card,
+  .impact-card,
+  .action-card,
+  .melanin-card,
+  .peer-education-card {
+    padding: 20px 18px;
+  }
+
+  .action-card-inline {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .action-btn {
+    width: 100%;
   }
 }
