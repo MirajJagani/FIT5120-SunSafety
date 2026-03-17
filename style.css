@@ -610,6 +610,25 @@ img {
   }
 }
 
+.prevention-link-box {
+  margin: 20px 0 8px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: #fff8f3;
+}
+
+.prevention-link-box h4 {
+  margin-bottom: 8px;
+  color: var(--text-dark);
+}
+
+.prevention-link-box p {
+  color: var(--text-body);
+  margin-bottom: 14px;
+  line-height: 1.6;
+}
+
 
 /* Prevention Page */
 .prevention-page {

@@ -10,7 +10,7 @@
   <header class="site-header">
     <div class="container nav-wrapper">
       <a href="index.html" class="brand">
-         <span class="brand-icon">☀</span>
+        <span class="brand-icon">☀</span>
         <span class="brand-text">SunSafe</span>
       </a>
 
@@ -30,7 +30,8 @@
         <div class="section-heading">
           <h2>Live UV Checker</h2>
           <p>
-            Check the current UV level in your area and get a simple sun-safety alert.
+            Check the current UV level in your area and get a simple, human-readable
+            sun-safety alert.
           </p>
         </div>
 
@@ -68,12 +69,21 @@
               <div class="uv-result-info">
                 <p><strong>Location:</strong> <span id="location-name">Waiting for input...</span></p>
                 <p><strong>Risk Level:</strong> <span id="risk-pill" class="risk-pill">No data</span></p>
-                <p>
-                  <strong>Alert:</strong>
-                  <span id="uv-message">Choose your location or search a suburb to see the UV result.</span>
-                </p>
+                <p><strong>Alert:</strong> <span id="uv-message">Choose your location or search a suburb to see the UV result.</span></p>
+                <p><strong>Protection Window:</strong> <span id="uv-damage-time">--</span></p>
                 <p><strong>Updated:</strong> <span id="last-updated">--</span></p>
               </div>
+            </div>
+
+            <div class="prevention-link-box prevention-hidden" id="prevention-link-box">
+              <h4>Ready for the next step?</h4>
+              <p>
+                Use this UV result to generate your sunscreen dosage, clothing recommendations,
+                and reminder plan.
+              </p>
+              <a href="prevention.html" class="btn btn-primary" id="go-to-prevention-btn">
+                Get Prevention Plan
+              </a>
             </div>
 
             <div class="hourly-forecast">
@@ -82,7 +92,7 @@
                 <p>No forecast loaded yet.</p>
               </div>
             </div>
-            <!-- UV trend visualisation -->
+
             <div class="uv-chart-section">
               <h3>UV Trend Visualisation</h3>
               <p class="chart-description">
@@ -101,6 +111,7 @@
       <p>&copy; <span id="year"></span> SunSafe. Designed for young Australians.</p>
     </div>
   </footer>
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="script.js"></script>
   <script src="uv-checker.js"></script>

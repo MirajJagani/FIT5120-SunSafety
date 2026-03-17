@@ -7,8 +7,10 @@ const uvIndexValueEl = document.getElementById("uv-index-value");
 const uvIndexCircleEl = document.getElementById("uv-index-circle");
 const riskPillEl = document.getElementById("risk-pill");
 const uvMessageEl = document.getElementById("uv-message");
+const uvDamageTimeEl = document.getElementById("uv-damage-time");
 const lastUpdatedEl = document.getElementById("last-updated");
 const hourlyGridEl = document.getElementById("hourly-grid");
+const preventionLinkBox = document.getElementById("prevention-link-box");
 
 const uvTrendChartEl = document.getElementById("uv-trend-chart");
 
@@ -52,6 +54,26 @@ function getUvRiskDetails(uv) {
     colorClass: "uv-extreme",
     message: "Extreme UV. Minimise direct sun exposure and protect immediately."
   };
+}
+
+function getHumanProtectionWindow(uv) {
+  if (uv < 3) {
+    return "Unprotected skin damage is less likely right now, but protection is still smart for long outdoor exposure.";
+  }
+
+  if (uv < 6) {
+    return "Unprotected lighter skin may start getting damaged in around 45–60 minutes.";
+  }
+
+  if (uv < 8) {
+    return "Unprotected lighter skin may start getting damaged in around 25–35 minutes.";
+  }
+
+  if (uv < 11) {
+    return "Unprotected lighter skin may start getting damaged in around 15–20 minutes.";
+  }
+
+  return "Unprotected lighter skin may start getting damaged in under 10–15 minutes.";
 }
 
 function formatHour(dateTimeString) {
@@ -105,7 +127,7 @@ function renderUvTrendChart(hourlyTimes, hourlyUvValues) {
   uvTrendChartInstance = new Chart(uvTrendChartEl, {
     type: "line",
     data: {
-      labels: labels,
+      labels,
       datasets: [
         {
           label: "UV Index",
@@ -125,7 +147,7 @@ function renderUvTrendChart(hourlyTimes, hourlyUvValues) {
         },
         tooltip: {
           callbacks: {
-            label: function (context) {
+            label(context) {
               return `UV ${context.parsed.y}`;
             }
           }
@@ -154,11 +176,13 @@ function renderUvTrendChart(hourlyTimes, hourlyUvValues) {
 function renderUvResult(locationLabel, currentUv, currentTime, hourlyTimes, hourlyUvValues) {
   const roundedUv = Number(currentUv).toFixed(1);
   const risk = getUvRiskDetails(Number(currentUv));
+  const damageWindowMessage = getHumanProtectionWindow(Number(currentUv));
 
   locationNameEl.textContent = locationLabel;
   uvIndexValueEl.textContent = roundedUv;
   riskPillEl.textContent = risk.label;
   uvMessageEl.textContent = risk.message;
+  uvDamageTimeEl.textContent = damageWindowMessage;
   lastUpdatedEl.textContent = new Date(currentTime).toLocaleString();
 
   resetUvClasses();
@@ -184,6 +208,10 @@ function renderUvResult(locationLabel, currentUv, currentTime, hourlyTimes, hour
 
   renderUvTrendChart(hourlyTimes, hourlyUvValues);
   saveLatestUvResult(locationLabel, currentUv, currentTime, risk);
+
+  if (preventionLinkBox) {
+    preventionLinkBox.classList.remove("prevention-hidden");
+  }
 }
 
 async function fetchUvByCoordinates(latitude, longitude, locationLabel) {
@@ -192,8 +220,13 @@ async function fetchUvByCoordinates(latitude, longitude, locationLabel) {
     uvIndexValueEl.textContent = "--";
     riskPillEl.textContent = "Loading...";
     uvMessageEl.textContent = "Loading live UV data...";
+    uvDamageTimeEl.textContent = "--";
     lastUpdatedEl.textContent = "--";
     hourlyGridEl.innerHTML = "<p>Loading forecast...</p>";
+
+    if (preventionLinkBox) {
+      preventionLinkBox.classList.add("prevention-hidden");
+    }
 
     const endpoint = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${latitude}&longitude=${longitude}&current=uv_index&hourly=uv_index&timezone=auto&forecast_hours=6`;
 
@@ -220,8 +253,13 @@ async function fetchUvByCoordinates(latitude, longitude, locationLabel) {
     uvIndexValueEl.textContent = "--";
     riskPillEl.textContent = "Unavailable";
     uvMessageEl.textContent = error.message;
+    uvDamageTimeEl.textContent = "--";
     lastUpdatedEl.textContent = "--";
     hourlyGridEl.innerHTML = "<p>Could not load forecast.</p>";
+
+    if (preventionLinkBox) {
+      preventionLinkBox.classList.add("prevention-hidden");
+    }
   }
 }
 
@@ -229,6 +267,7 @@ async function searchSuburbAndFetchUv(query) {
   try {
     locationNameEl.textContent = "Searching...";
     uvMessageEl.textContent = "Looking up suburb...";
+    uvDamageTimeEl.textContent = "--";
     hourlyGridEl.innerHTML = "<p>Loading forecast...</p>";
 
     const geocodeUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=1&language=en&countryCode=AU`;
@@ -255,6 +294,7 @@ async function searchSuburbAndFetchUv(query) {
     uvIndexValueEl.textContent = "--";
     riskPillEl.textContent = "Unavailable";
     uvMessageEl.textContent = error.message;
+    uvDamageTimeEl.textContent = "--";
     lastUpdatedEl.textContent = "--";
     hourlyGridEl.innerHTML = "<p>Try another suburb or use your location.</p>";
   }
@@ -283,6 +323,7 @@ function useBrowserLocation() {
       }
 
       uvMessageEl.textContent = message;
+      uvDamageTimeEl.textContent = "--";
       hourlyGridEl.innerHTML = "<p>Use suburb search as a fallback.</p>";
     },
     {
