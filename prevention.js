@@ -1,25 +1,49 @@
-const preventionUseLocationBtn = document.getElementById("prevention-use-location-btn");
-const preventionSuburbForm = document.getElementById("prevention-suburb-form");
-const preventionSuburbInput = document.getElementById("prevention-suburb-input");
+const preventionForm = document.getElementById("prevention-form");
+const uvIndexInput = document.getElementById("uv-index-input");
 
-const preventionLocationNameEl = document.getElementById("prevention-location-name");
-const preventionUvIndexValueEl = document.getElementById("prevention-uv-index-value");
-const preventionUvIndexCircleEl = document.getElementById("prevention-uv-index-circle");
-const preventionRiskPillEl = document.getElementById("prevention-risk-pill");
-const preventionUvMessageEl = document.getElementById("prevention-uv-message");
-const preventionLastUpdatedEl = document.getElementById("prevention-last-updated");
-const preventionAdviceListEl = document.getElementById("prevention-advice-list");
+const preventionPlaceholder = document.getElementById("prevention-placeholder");
+const preventionResults = document.getElementById("prevention-results");
 
-function getPreventionDetails(uv) {
+const summaryUvValue = document.getElementById("summary-uv-value");
+const summaryRiskLevel = document.getElementById("summary-risk-level");
+const summaryRiskPill = document.getElementById("summary-risk-pill");
+const summaryMessage = document.getElementById("summary-message");
+const preventionUvCircle = document.getElementById("prevention-uv-circle");
+
+const spfValue = document.getElementById("spf-value");
+const dosageValue = document.getElementById("dosage-value");
+const pumpValue = document.getElementById("pump-value");
+const reapplyValue = document.getElementById("reapply-value");
+const dosageNote = document.getElementById("dosage-note");
+
+const clothingList = document.getElementById("clothing-list");
+
+const reminderInterval = document.getElementById("reminder-interval");
+const addReminderBtn = document.getElementById("add-reminder-btn");
+const clearRemindersBtn = document.getElementById("clear-reminders-btn");
+const reminderStatus = document.getElementById("reminder-status");
+const reminderList = document.getElementById("reminder-list");
+const reminderBanner = document.getElementById("reminder-banner");
+
+let currentPlan = null;
+let reminders = JSON.parse(localStorage.getItem("sunSafeReminders")) || [];
+
+function getPreventionPlan(uv) {
   if (uv < 3) {
     return {
       label: "Low",
       colorClass: "uv-low",
-      message: "Low UV. Minimal protection needed, but basic protection is still a good idea.",
-      actions: [
+      message: "Low UV. Basic protection is still recommended, especially if you stay outside for a long time.",
+      spf: "SPF 30+",
+      teaspoons: "1 teaspoon",
+      pumps: "2 pumps",
+      reapplyMinutes: 120,
+      dosageNote:
+        "A small amount is enough for low UV, but cover exposed skin properly.",
+      clothing: [
         "Wear sunglasses if the sunlight feels strong.",
-        "Use sunscreen if you stay outdoors for a long time.",
-        "A hat and light protective clothing are still helpful."
+        "A light shirt and cap are helpful for outdoor comfort.",
+        "Use shade if you are outside for extended periods."
       ]
     };
   }
@@ -28,13 +52,17 @@ function getPreventionDetails(uv) {
     return {
       label: "Moderate",
       colorClass: "uv-moderate",
-      message: "Moderate UV. Protection is recommended.",
-      actions: [
-        "Slip on protective clothing that covers your skin.",
-        "Slop on SPF50+ sunscreen before going outside.",
-        "Slap on a wide-brim hat.",
-        "Seek shade during the middle of the day.",
-        "Slide on sunglasses."
+      message: "Moderate UV. Protection is recommended before heading outdoors.",
+      spf: "SPF 50+",
+      teaspoons: "1.5 teaspoons",
+      pumps: "3 pumps",
+      reapplyMinutes: 120,
+      dosageNote:
+        "Use enough sunscreen to cover exposed areas like face, neck, arms, and legs.",
+      clothing: [
+        "Wear a broad-brim hat instead of a cap if possible.",
+        "Use sunglasses with UV protection.",
+        "Choose a light long-sleeved shirt if you plan to stay outside."
       ]
     };
   }
@@ -43,13 +71,18 @@ function getPreventionDetails(uv) {
     return {
       label: "High",
       colorClass: "uv-high",
-      message: "High UV. Protection is needed now.",
-      actions: [
-        "Wear long-sleeved or UPF clothing.",
-        "Apply SPF50+ sunscreen and reapply every 2 hours.",
-        "Wear a broad-brim hat.",
-        "Stay in the shade whenever possible.",
-        "Use sunglasses with UV protection."
+      message: "High UV. Protection is needed now before outdoor exposure.",
+      spf: "SPF 50+",
+      teaspoons: "2 teaspoons",
+      pumps: "4 pumps",
+      reapplyMinutes: 90,
+      dosageNote:
+        "Apply sunscreen generously to all exposed skin. Reapply sooner if sweating or wiping skin.",
+      clothing: [
+        "Wear lightweight long sleeves or sun-protective clothing.",
+        "Use a broad-brim hat for face, neck, and ear coverage.",
+        "Wear UV-protective sunglasses.",
+        "Seek shade where possible."
       ]
     };
   }
@@ -58,13 +91,19 @@ function getPreventionDetails(uv) {
     return {
       label: "Very High",
       colorClass: "uv-very-high",
-      message: "Very high UV. Extra protection is needed.",
-      actions: [
-        "Reduce time in direct sunlight, especially around midday.",
-        "Wear covering clothing and a broad-brim hat.",
-        "Use SPF50+ sunscreen on all exposed skin.",
-        "Seek deep shade or indoor cover when possible.",
-        "Wear wraparound sunglasses."
+      message: "Very high UV. Extra protection is needed and outdoor exposure should be limited.",
+      spf: "SPF 50+",
+      teaspoons: "2.5 teaspoons",
+      pumps: "5 pumps",
+      reapplyMinutes: 80,
+      dosageNote:
+        "Use a generous amount of sunscreen and cover exposed skin carefully before going out.",
+      clothing: [
+        "Wear long sleeves or UPF-rated clothing.",
+        "Choose a broad-brim hat rather than a cap.",
+        "Use wraparound sunglasses.",
+        "Stay in deep shade whenever possible.",
+        "Avoid long outdoor exposure around midday."
       ]
     };
   }
@@ -72,19 +111,24 @@ function getPreventionDetails(uv) {
   return {
     label: "Extreme",
     colorClass: "uv-extreme",
-    message: "Extreme UV. Avoid direct sun exposure if possible.",
-    actions: [
-      "Stay indoors or in deep shade during peak UV hours.",
-      "Cover up with full protective clothing.",
-      "Apply SPF50+ sunscreen generously and often.",
-      "Wear a broad-brim hat and sunglasses.",
+    message: "Extreme UV. Avoid direct sun exposure if possible and protect all exposed skin immediately.",
+    spf: "SPF 50+",
+    teaspoons: "3 teaspoons",
+    pumps: "6 pumps",
+    reapplyMinutes: 60,
+    dosageNote:
+      "Extreme UV requires maximum coverage. Apply sunscreen generously and do not rely on one quick application.",
+    clothing: [
+      "Wear full protective clothing with maximum skin coverage.",
+      "Use a broad-brim hat and UV-protective sunglasses.",
+      "Seek deep shade or stay indoors during peak hours.",
       "Delay outdoor activity if possible."
     ]
   };
 }
 
-function resetPreventionUvClasses() {
-  preventionUvIndexCircleEl.classList.remove(
+function resetRiskClasses() {
+  preventionUvCircle.classList.remove(
     "uv-low",
     "uv-moderate",
     "uv-high",
@@ -92,7 +136,7 @@ function resetPreventionUvClasses() {
     "uv-extreme"
   );
 
-  preventionRiskPillEl.classList.remove(
+  summaryRiskPill.classList.remove(
     "uv-low",
     "uv-moderate",
     "uv-high",
@@ -101,141 +145,189 @@ function resetPreventionUvClasses() {
   );
 }
 
-function renderPreventionResult(locationLabel, currentUv, currentTime) {
-  const roundedUv = Number(currentUv).toFixed(1);
-  const details = getPreventionDetails(Number(currentUv));
+function renderClothing(clothingItems) {
+  clothingList.innerHTML = "";
 
-  preventionLocationNameEl.textContent = locationLabel;
-  preventionUvIndexValueEl.textContent = roundedUv;
-  preventionRiskPillEl.textContent = details.label;
-  preventionUvMessageEl.textContent = details.message;
-  preventionLastUpdatedEl.textContent = new Date(currentTime).toLocaleString();
-
-  resetPreventionUvClasses();
-  preventionUvIndexCircleEl.classList.add(details.colorClass);
-  preventionRiskPillEl.classList.add(details.colorClass);
-
-  preventionAdviceListEl.innerHTML = "";
-
-  details.actions.forEach((action) => {
+  clothingItems.forEach((item) => {
     const li = document.createElement("li");
-    li.textContent = action;
-    preventionAdviceListEl.appendChild(li);
+    li.textContent = item;
+    clothingList.appendChild(li);
   });
 }
 
-async function fetchPreventionUv(latitude, longitude, locationLabel) {
-  try {
-    preventionLocationNameEl.textContent = locationLabel || "Fetching location...";
-    preventionUvIndexValueEl.textContent = "--";
-    preventionRiskPillEl.textContent = "Loading...";
-    preventionUvMessageEl.textContent = "Loading prevention advice...";
-    preventionLastUpdatedEl.textContent = "--";
-    preventionAdviceListEl.innerHTML = "<li>Loading actions...</li>";
+function renderPreventionPlan(uv) {
+  const plan = getPreventionPlan(uv);
+  currentPlan = {
+    uv,
+    ...plan
+  };
 
-    const endpoint = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${latitude}&longitude=${longitude}&current=uv_index&timezone=auto&forecast_hours=1`;
+  preventionPlaceholder.classList.add("prevention-hidden");
+  preventionResults.classList.remove("prevention-hidden");
 
-    const response = await fetch(endpoint);
-    if (!response.ok) {
-      throw new Error("Failed to fetch UV data.");
-    }
+  summaryUvValue.textContent = Number(uv).toFixed(1);
+  summaryRiskLevel.textContent = `${plan.label} Risk`;
+  summaryRiskPill.textContent = plan.label;
+  summaryMessage.textContent = plan.message;
 
-    const data = await response.json();
+  spfValue.textContent = plan.spf;
+  dosageValue.textContent = plan.teaspoons;
+  pumpValue.textContent = plan.pumps;
+  reapplyValue.textContent = `${plan.reapplyMinutes} minutes`;
+  dosageNote.textContent = plan.dosageNote;
 
-    const currentUv = data.current?.uv_index;
-    const currentTime = data.current?.time;
+  renderClothing(plan.clothing);
 
-    if (currentUv === undefined) {
-      throw new Error("UV data unavailable for this location.");
-    }
+  resetRiskClasses();
+  preventionUvCircle.classList.add(plan.colorClass);
+  summaryRiskPill.classList.add(plan.colorClass);
 
-    renderPreventionResult(locationLabel, currentUv, currentTime);
-  } catch (error) {
-    resetPreventionUvClasses();
-    preventionLocationNameEl.textContent = locationLabel || "Location unavailable";
-    preventionUvIndexValueEl.textContent = "--";
-    preventionRiskPillEl.textContent = "Unavailable";
-    preventionUvMessageEl.textContent = error.message;
-    preventionLastUpdatedEl.textContent = "--";
-    preventionAdviceListEl.innerHTML = "<li>Could not load advice.</li>";
-  }
+  reminderInterval.value = String(plan.reapplyMinutes);
+  reminderStatus.textContent = `Recommended reminder time selected: every ${plan.reapplyMinutes} minutes.`;
 }
 
-async function searchSuburbAndFetchPreventionUv(query) {
-  try {
-    preventionLocationNameEl.textContent = "Searching...";
-    preventionUvMessageEl.textContent = "Looking up suburb...";
-    preventionAdviceListEl.innerHTML = "<li>Loading actions...</li>";
-
-    const geocodeUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=1&language=en&countryCode=AU`;
-
-    const response = await fetch(geocodeUrl);
-    if (!response.ok) {
-      throw new Error("Failed to search suburb.");
-    }
-
-    const data = await response.json();
-
-    if (!data.results || data.results.length === 0) {
-      throw new Error("No matching Australian suburb found.");
-    }
-
-    const place = data.results[0];
-    const labelParts = [place.name, place.admin1, place.country].filter(Boolean);
-    const locationLabel = labelParts.join(", ");
-
-    await fetchPreventionUv(place.latitude, place.longitude, locationLabel);
-  } catch (error) {
-    resetPreventionUvClasses();
-    preventionLocationNameEl.textContent = "Search failed";
-    preventionUvIndexValueEl.textContent = "--";
-    preventionRiskPillEl.textContent = "Unavailable";
-    preventionUvMessageEl.textContent = error.message;
-    preventionLastUpdatedEl.textContent = "--";
-    preventionAdviceListEl.innerHTML = "<li>Try another suburb or use your location.</li>";
-  }
+function saveReminders() {
+  localStorage.setItem("sunSafeReminders", JSON.stringify(reminders));
 }
 
-function useBrowserLocationForPrevention() {
-  if (!navigator.geolocation) {
-    preventionUvMessageEl.textContent = "Geolocation is not supported in this browser.";
+function formatDateTime(timestamp) {
+  return new Date(timestamp).toLocaleString();
+}
+
+function renderReminders() {
+  reminderList.innerHTML = "";
+
+  if (reminders.length === 0) {
+    reminderList.innerHTML = `<li class="empty-reminder">No reminders set yet.</li>`;
     return;
   }
 
-  navigator.geolocation.getCurrentPosition(
-    async (position) => {
-      const { latitude, longitude } = position.coords;
-      await fetchPreventionUv(latitude, longitude, "Your current location");
-    },
-    (error) => {
-      let message = "Unable to get your location.";
+  reminders.forEach((reminder) => {
+    const li = document.createElement("li");
+    li.className = "reminder-item";
 
-      if (error.code === 1) {
-        message = "Location permission was denied. Please search by suburb instead.";
-      } else if (error.code === 2) {
-        message = "Location information is unavailable right now.";
-      } else if (error.code === 3) {
-        message = "Location request timed out. Please try again.";
-      }
+    li.innerHTML = `
+      <div class="reminder-item-text">
+        <strong>${reminder.title}</strong>
+        <span>Every ${reminder.intervalMinutes} minutes</span>
+        <span>Next reminder: ${formatDateTime(reminder.nextDue)}</span>
+      </div>
+      <button type="button" class="remove-reminder-btn" data-id="${reminder.id}">
+        Remove
+      </button>
+    `;
 
-      preventionUvMessageEl.textContent = message;
-      preventionAdviceListEl.innerHTML = "<li>Use suburb search as a fallback.</li>";
-    },
-    {
-      enableHighAccuracy: true,
-      timeout: 10000,
-      maximumAge: 0
-    }
-  );
+    reminderList.appendChild(li);
+  });
 }
 
-preventionUseLocationBtn?.addEventListener("click", useBrowserLocationForPrevention);
+function showReminderBanner(message) {
+  reminderBanner.textContent = message;
+  reminderBanner.classList.remove("prevention-hidden");
 
-preventionSuburbForm?.addEventListener("submit", (event) => {
+  clearTimeout(showReminderBanner.timeoutId);
+  showReminderBanner.timeoutId = setTimeout(() => {
+    reminderBanner.classList.add("prevention-hidden");
+  }, 5000);
+}
+
+function sendReminderNotification(message) {
+  showReminderBanner(message);
+
+  if ("Notification" in window) {
+    if (Notification.permission === "granted") {
+      new Notification("SunSafe Reminder", {
+        body: message
+      });
+    }
+  }
+}
+
+function requestNotificationPermission() {
+  if ("Notification" in window && Notification.permission === "default") {
+    Notification.requestPermission().catch(() => {});
+  }
+}
+
+function addReminder() {
+  if (!currentPlan) {
+    reminderStatus.textContent = "Generate a prevention plan before adding reminders.";
+    return;
+  }
+
+  const intervalMinutes = Number(reminderInterval.value);
+
+  const reminder = {
+    id: Date.now(),
+    title: `${currentPlan.label} UV Reapply Reminder`,
+    intervalMinutes,
+    nextDue: Date.now() + intervalMinutes * 60 * 1000,
+    message: `Time to reapply sunscreen. UV ${Number(currentPlan.uv).toFixed(1)} is currently ${currentPlan.label.toLowerCase()}.`
+  };
+
+  reminders.push(reminder);
+  saveReminders();
+  renderReminders();
+  requestNotificationPermission();
+
+  reminderStatus.textContent = `Reminder added successfully for every ${intervalMinutes} minutes.`;
+}
+
+function clearAllReminders() {
+  reminders = [];
+  saveReminders();
+  renderReminders();
+  reminderStatus.textContent = "All reminders were removed.";
+}
+
+function removeReminder(id) {
+  reminders = reminders.filter((reminder) => reminder.id !== id);
+  saveReminders();
+  renderReminders();
+  reminderStatus.textContent = "Reminder removed.";
+}
+
+function checkReminderSchedule() {
+  const now = Date.now();
+  let updated = false;
+
+  reminders.forEach((reminder) => {
+    if (now >= reminder.nextDue) {
+      sendReminderNotification(reminder.message);
+      reminder.nextDue = now + reminder.intervalMinutes * 60 * 1000;
+      updated = true;
+    }
+  });
+
+  if (updated) {
+    saveReminders();
+    renderReminders();
+  }
+}
+
+preventionForm?.addEventListener("submit", (event) => {
   event.preventDefault();
-  const suburb = preventionSuburbInput.value.trim();
 
-  if (!suburb) return;
+  const uv = Number(uvIndexInput.value);
 
-  searchSuburbAndFetchPreventionUv(suburb);
+  if (Number.isNaN(uv) || uv < 0 || uv > 15) {
+    reminderStatus.textContent = "Please enter a valid UV Index between 0 and 15.";
+    return;
+  }
+
+  renderPreventionPlan(uv);
 });
+
+addReminderBtn?.addEventListener("click", addReminder);
+
+clearRemindersBtn?.addEventListener("click", clearAllReminders);
+
+reminderList?.addEventListener("click", (event) => {
+  if (event.target.classList.contains("remove-reminder-btn")) {
+    const id = Number(event.target.dataset.id);
+    removeReminder(id);
+  }
+});
+
+renderReminders();
+setInterval(checkReminderSchedule, 30000);

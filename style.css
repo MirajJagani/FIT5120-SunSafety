@@ -609,3 +609,338 @@ img {
     font-size: 1.8rem;
   }
 }
+
+
+/* Prevention Page */
+.prevention-page {
+  padding: 56px 0 72px;
+  background: linear-gradient(180deg, #fff9f5 0%, #fff3ea 100%);
+}
+
+.prevention-grid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 28px;
+  align-items: start;
+  margin-top: 32px;
+}
+
+.prevention-form-card,
+.prevention-output-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 28px;
+  box-shadow: 0 12px 28px rgba(20, 20, 43, 0.06);
+}
+
+.prevention-form-card h3,
+.prevention-output-card h3,
+.info-card h3 {
+  margin-bottom: 14px;
+  color: var(--text-dark);
+}
+
+.prevention-intro {
+  color: var(--text-body);
+  margin-bottom: 18px;
+  line-height: 1.7;
+}
+
+.prevention-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.prevention-form label,
+.reminder-controls label {
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.prevention-form input,
+.reminder-controls select {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  font-size: 1rem;
+  outline: none;
+  background: #fff;
+}
+
+.prevention-form input:focus,
+.reminder-controls select:focus {
+  border-color: var(--orange);
+}
+
+.prevention-hidden {
+  display: none;
+}
+
+.placeholder-state {
+  text-align: center;
+  padding: 36px 20px;
+  border: 1px dashed var(--border);
+  border-radius: 20px;
+  background: #fff9f5;
+}
+
+.placeholder-state h3 {
+  margin-bottom: 10px;
+}
+
+.placeholder-state p {
+  color: var(--text-body);
+  line-height: 1.7;
+}
+
+.prevention-summary {
+  display: flex;
+  gap: 22px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.prevention-uv-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #c8ced8;
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.prevention-summary-text {
+  flex: 1;
+  min-width: 220px;
+}
+
+.summary-label {
+  color: var(--text-body);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.prevention-summary-text h3 {
+  margin-bottom: 10px;
+}
+
+.risk-pill {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 999px;
+  color: #fff;
+  font-weight: 700;
+  margin-bottom: 12px;
+  background: #c8ced8;
+}
+
+.prevention-summary-text p:last-child {
+  color: var(--text-body);
+  line-height: 1.7;
+}
+
+.prevention-cards {
+  display: grid;
+  gap: 18px;
+}
+
+.info-card {
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 22px 20px;
+  background: #fffdfa;
+}
+
+.metric-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f4e5da;
+}
+
+.metric-row:last-of-type {
+  margin-bottom: 12px;
+}
+
+.metric-label {
+  color: var(--text-body);
+  font-weight: 600;
+}
+
+.metric-value {
+  color: var(--text-dark);
+  font-weight: 700;
+  text-align: right;
+}
+
+.info-note-text {
+  color: var(--text-body);
+  line-height: 1.7;
+}
+
+.advice-list {
+  padding-left: 20px;
+}
+
+.advice-list li {
+  margin-bottom: 10px;
+  color: var(--text-body);
+  line-height: 1.6;
+}
+
+.reminder-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.reminder-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border);
+}
+
+.reminder-status {
+  margin: 14px 0 16px;
+  color: var(--text-body);
+  line-height: 1.6;
+}
+
+.reminder-tracking h4 {
+  margin-bottom: 12px;
+  color: var(--text-dark);
+}
+
+.reminder-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.reminder-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: center;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: #fff8f3;
+  margin-bottom: 12px;
+}
+
+.reminder-item-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.reminder-item-text strong {
+  color: var(--text-dark);
+}
+
+.reminder-item-text span {
+  color: var(--text-body);
+  font-size: 0.95rem;
+}
+
+.remove-reminder-btn {
+  padding: 10px 14px;
+  border: none;
+  border-radius: 999px;
+  background: #ffe1df;
+  color: #d64545;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.empty-reminder {
+  padding: 14px;
+  border: 1px dashed var(--border);
+  border-radius: 16px;
+  color: var(--text-body);
+  background: #fff9f5;
+}
+
+.reminder-banner {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--orange), var(--pink));
+  color: #fff;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+/* Risk colours */
+.uv-low {
+  background: #35b56a !important;
+}
+
+.uv-moderate {
+  background: #f2c94c !important;
+  color: #1f1f1f !important;
+}
+
+.uv-high {
+  background: #f2994a !important;
+}
+
+.uv-very-high {
+  background: #eb5757 !important;
+}
+
+.uv-extreme {
+  background: #9b51e0 !important;
+}
+
+@media (max-width: 980px) {
+  .prevention-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .prevention-page {
+    padding: 40px 0 56px;
+  }
+
+  .prevention-form-card,
+  .prevention-output-card {
+    padding: 22px 18px;
+  }
+
+  .prevention-uv-circle {
+    width: 105px;
+    height: 105px;
+    font-size: 1.8rem;
+  }
+
+  .metric-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .reminder-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .reminder-actions .btn,
+  .remove-reminder-btn {
+    width: 100%;
+  }
+}

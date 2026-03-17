@@ -10,7 +10,7 @@
   <header class="site-header">
     <div class="container nav-wrapper">
       <a href="index.html" class="brand">
-        <span class="brand-icon"></span>
+        <span class="brand-icon">☀</span>
         <span class="brand-text">SunSafe</span>
       </a>
 
@@ -28,56 +28,129 @@
     <section class="prevention-page">
       <div class="container">
         <div class="section-heading">
-          <h2>Sun-Safety Prevention</h2>
+          <h2>Sun-Safety Prevention Plan</h2>
           <p>
-            Discover personalised sun-protection advice based on today's UV level.
+            Enter your UV Index to get sunscreen dosage guidance, clothing recommendations,
+            and sunscreen reminder support.
           </p>
         </div>
 
-        <div class="uv-layout">
-          <div class="uv-form-card">
-            <h3>Find UV by Location</h3>
+        <div class="prevention-grid">
+          <div class="prevention-form-card">
+            <h3>Create Your Protection Plan</h3>
+            <p class="prevention-intro">
+              Use the UV result from the UV Checker page or enter today’s UV Index manually.
+            </p>
 
-            <button id="prevention-use-location-btn" type="button" class="btn btn-primary">
-              Use My Location
-            </button>
-
-            <p>or</p>
-
-            <form id="prevention-suburb-form">
-              <label for="prevention-suburb-input">Enter suburb or city</label>
+            <form id="prevention-form" class="prevention-form">
+              <label for="uv-index-input">Today's UV Index</label>
               <input
-                type="text"
-                id="prevention-suburb-input"
-                name="prevention-suburb-input"
-                placeholder="e.g. Clayton, Melbourne"
+                type="number"
+                id="uv-index-input"
+                name="uv-index-input"
+                min="0"
+                max="15"
+                step="0.1"
+                placeholder="e.g. 7.5"
                 required
               />
-              <button type="submit" class="btn btn-secondary">Search</button>
+
+              <button type="submit" class="btn btn-primary">Generate Prevention Plan</button>
             </form>
+
+            <div class="reminder-banner prevention-hidden" id="reminder-banner"></div>
           </div>
 
-          <div class="prevention-result-card">
-            <h3>Prevention Advice</h3>
-
-            <div class="uv-live-result">
-              <div class="uv-index-circle" id="prevention-uv-index-circle">
-                <span id="prevention-uv-index-value">--</span>
-              </div>
-
-              <div class="uv-result-info">
-                <p><strong>Location:</strong> <span id="prevention-location-name">Waiting for input...</span></p>
-                <p><strong>Risk Level:</strong> <span id="prevention-risk-pill" class="risk-pill">No data</span></p>
-                <p><strong>Alert:</strong> <span id="prevention-uv-message">Select a location to see prevention advice.</span></p>
-                <p><strong>Updated:</strong> <span id="prevention-last-updated">--</span></p>
-              </div>
+          <div class="prevention-output-card">
+            <div id="prevention-placeholder" class="placeholder-state">
+              <h3>No Prevention Plan Yet</h3>
+              <p>
+                Enter a UV Index to view your sunscreen dosage, clothing advice,
+                and reminder options.
+              </p>
             </div>
 
-            <div class="prevention-advice">
-              <h3>Recommended Actions</h3>
-              <ul id="prevention-advice-list" class="advice-list">
-                <li></li>
-              </ul>
+            <div id="prevention-results" class="prevention-results prevention-hidden">
+              <div class="prevention-summary">
+                <div class="prevention-uv-circle" id="prevention-uv-circle">
+                  <span id="summary-uv-value">--</span>
+                </div>
+
+                <div class="prevention-summary-text">
+                  <p class="summary-label">Current Prevention Summary</p>
+                  <h3 id="summary-risk-level">No data</h3>
+                  <p class="risk-pill" id="summary-risk-pill">No data</p>
+                  <p id="summary-message">
+                    Your protection guidance will appear here after you enter a UV Index.
+                  </p>
+                </div>
+              </div>
+
+              <div class="prevention-cards">
+                <article class="info-card">
+                  <h3>Sunscreen Dosage Guidance</h3>
+                  <div class="metric-row">
+                    <span class="metric-label">Recommended SPF</span>
+                    <span class="metric-value" id="spf-value">--</span>
+                  </div>
+                  <div class="metric-row">
+                    <span class="metric-label">Estimated Dosage</span>
+                    <span class="metric-value" id="dosage-value">--</span>
+                  </div>
+                  <div class="metric-row">
+                    <span class="metric-label">Pump Estimate</span>
+                    <span class="metric-value" id="pump-value">--</span>
+                  </div>
+                  <div class="metric-row">
+                    <span class="metric-label">Reapply Every</span>
+                    <span class="metric-value" id="reapply-value">--</span>
+                  </div>
+                  <p class="info-note-text" id="dosage-note">
+                    Dosage guidance will appear after you generate your prevention plan.
+                  </p>
+                </article>
+
+                <article class="info-card">
+                  <h3>Clothing Recommendations</h3>
+                  <ul class="advice-list" id="clothing-list">
+                    <li>No clothing recommendations yet.</li>
+                  </ul>
+                </article>
+
+                <article class="info-card">
+                  <h3>Sunscreen Reminders</h3>
+
+                  <div class="reminder-controls">
+                    <label for="reminder-interval">Reminder time</label>
+                    <select id="reminder-interval">
+                      <option value="60">Every 60 minutes</option>
+                      <option value="80">Every 80 minutes</option>
+                      <option value="90">Every 90 minutes</option>
+                      <option value="120">Every 120 minutes</option>
+                    </select>
+
+                    <div class="reminder-actions">
+                      <button type="button" id="add-reminder-btn" class="btn btn-secondary">
+                        Add Reminder
+                      </button>
+                      <button type="button" id="clear-reminders-btn" class="btn btn-secondary btn-outline">
+                        Clear All
+                      </button>
+                    </div>
+                  </div>
+
+                  <p class="reminder-status" id="reminder-status">
+                    Generate a prevention plan before adding reminders.
+                  </p>
+
+                  <div class="reminder-tracking">
+                    <h4>Active Reminder Tracking</h4>
+                    <ul id="reminder-list" class="reminder-list">
+                      <li class="empty-reminder">No reminders set yet.</li>
+                    </ul>
+                  </div>
+                </article>
+              </div>
             </div>
           </div>
         </div>
