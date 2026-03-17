@@ -10,10 +10,8 @@ const uvMessageEl = document.getElementById("uv-message");
 const lastUpdatedEl = document.getElementById("last-updated");
 const hourlyGridEl = document.getElementById("hourly-grid");
 
-// Canvas element for UV visualisation
 const uvTrendChartEl = document.getElementById("uv-trend-chart");
 
-// Store chart instance so it can be replaced when the user searches again
 let uvTrendChartInstance = null;
 
 function getUvRiskDetails(uv) {
@@ -82,14 +80,24 @@ function resetUvClasses() {
   );
 }
 
-// Create or update the UV trend line chart
+function saveLatestUvResult(locationLabel, currentUv, currentTime, risk) {
+  const latestUvResult = {
+    location: locationLabel,
+    uv: Number(currentUv),
+    updatedAt: currentTime,
+    riskLabel: risk.label,
+    message: risk.message
+  };
+
+  localStorage.setItem("latestUvResult", JSON.stringify(latestUvResult));
+}
+
 function renderUvTrendChart(hourlyTimes, hourlyUvValues) {
   if (!uvTrendChartEl || typeof Chart === "undefined") return;
 
   const labels = hourlyTimes.slice(0, 6).map((time) => formatHour(time));
   const values = hourlyUvValues.slice(0, 6).map((uv) => Number(uv).toFixed(1));
 
-  // Destroy old chart before rendering a new one
   if (uvTrendChartInstance) {
     uvTrendChartInstance.destroy();
   }
@@ -174,8 +182,8 @@ function renderUvResult(locationLabel, currentUv, currentTime, hourlyTimes, hour
     hourlyGridEl.appendChild(card);
   });
 
-  // Render the UV trend visualisation
   renderUvTrendChart(hourlyTimes, hourlyUvValues);
+  saveLatestUvResult(locationLabel, currentUv, currentTime, risk);
 }
 
 async function fetchUvByCoordinates(latitude, longitude, locationLabel) {

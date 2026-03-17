@@ -155,7 +155,7 @@ function renderClothing(clothingItems) {
   });
 }
 
-function renderPreventionPlan(uv) {
+function renderPreventionPlan(uv, sourceText = "") {
   const plan = getPreventionPlan(uv);
   currentPlan = {
     uv,
@@ -168,7 +168,9 @@ function renderPreventionPlan(uv) {
   summaryUvValue.textContent = Number(uv).toFixed(1);
   summaryRiskLevel.textContent = `${plan.label} Risk`;
   summaryRiskPill.textContent = plan.label;
-  summaryMessage.textContent = plan.message;
+  summaryMessage.textContent = sourceText
+    ? `${plan.message} ${sourceText}`
+    : plan.message;
 
   spfValue.textContent = plan.spf;
   dosageValue.textContent = plan.teaspoons;
@@ -184,6 +186,26 @@ function renderPreventionPlan(uv) {
 
   reminderInterval.value = String(plan.reapplyMinutes);
   reminderStatus.textContent = `Recommended reminder time selected: every ${plan.reapplyMinutes} minutes.`;
+}
+
+function loadLatestUvResult() {
+  const stored = localStorage.getItem("latestUvResult");
+  if (!stored) return;
+
+  try {
+    const latestUv = JSON.parse(stored);
+
+    if (latestUv && typeof latestUv.uv === "number") {
+      uvIndexInput.value = latestUv.uv;
+
+      const sourceText = `Based on your latest UV Checker result for ${latestUv.location}.`;
+      renderPreventionPlan(latestUv.uv, sourceText);
+
+      reminderStatus.textContent = `Loaded latest UV result from UV Checker: ${latestUv.location}.`;
+    }
+  } catch (error) {
+    console.error("Could not load latest UV result:", error);
+  }
 }
 
 function saveReminders() {
@@ -330,4 +352,5 @@ reminderList?.addEventListener("click", (event) => {
 });
 
 renderReminders();
+loadLatestUvResult();
 setInterval(checkReminderSchedule, 30000);
