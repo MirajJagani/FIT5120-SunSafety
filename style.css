@@ -1403,6 +1403,36 @@ img {
   cursor: pointer;
   transition: 0.2s ease;
   box-shadow: 0 8px 18px rgba(20, 20, 43, 0.04);
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.skin-type-btn::after {
+  content: "";
+  margin-left: auto;
+  width: 42px;
+  height: 18px;
+  border-radius: 999px;
+  flex-shrink: 0;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background-color: #ddd;
+}
+
+.skin-type-btn[data-skin="all"]::after {
+  background: linear-gradient(90deg, #f6d7c3 0%, #d9a07b 50%, #6b3f2a 100%);
+}
+
+.skin-type-btn[data-skin="lighter"]::after {
+  background-color: #f6d7c3;
+}
+
+.skin-type-btn[data-skin="medium"]::after {
+  background-color: #d9a07b;
+}
+
+.skin-type-btn[data-skin="darker"]::after {
+  background-color: #6b3f2a;
 }
 
 .skin-type-btn:hover,
